@@ -2,6 +2,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+// Adiciona o GroqService como um serviço de escopo para injeção de dependência
+builder.Services.AddScoped<chatbot_contabilidade.Services.GroqService>(); // <- adiciona essa
+// Adiciona o HttpClient para que o GroqService possa fazer requisições HTTP
+builder.Services.AddHttpClient(); // <- e essa
 
 var app = builder.Build();
 
@@ -9,7 +13,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -24,6 +27,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
 
 app.Run();

@@ -1,8 +1,185 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Chatbot Contabilidade";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>chatbot</h2>
+    </div>
+
+    <div class="chat-messages" id="chatMessages">
+        <div class="message assistant">
+            <div class="message-content">
+                Olá! Sou seu assistente de contabilidade. Como posso te ajudar hoje?
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Digite sua dúvida contábil..." />
+        <button id="sendBtn" onclick="enviarMensagem()">Enviar</button>
+    </div>
 </div>
+
+<style>
+    body {
+        background-color: rgb(78, 78, 78);
+        font-family: opensans, sans-serif;
+        margin: 0;
+    }
+
+    .chat-container {
+        max-width: 800px;
+        margin: 30px auto;
+        border: 1px solid #000000;
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 75vh;
+        box-shadow: -10px -10px 10px #0000005e, 10px 10px 10px #0000005e
+        }
+
+    .chat-header {
+        background-color: #525252;
+        color: white;
+        padding: 16px 20px;
+    }
+
+    .chat-header h2 { margin: 0; font-size: 1.2rem; }
+    .chat-header p { margin: 4px 0 0; font-size: 0.85rem; opacity: 0.8; }
+
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: #ffffff5e;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .message { display: flex; }
+    .message.user { justify-content: flex-end; }
+    .message.assistant { justify-content: flex-start; }
+
+    .message-content {
+        max-width: 70%;
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .message.user .message-content {
+        background-image: linear-gradient(135deg, #81a3b8 0%, #3c8de4 100%);
+        color: rgb(0, 0, 0);
+        border-bottom-right-radius: 2px;
+    }
+
+    .message.assistant .message-content {
+        background-image: linear-gradient(135deg, #4db1eb 0%, #1b7ddf 100%);
+        border-bottom-left-radius: 2px;
+    }
+
+    .chat-input-area {
+        display: flex;
+        padding: 12px;
+        border-top: 1px solid #000000;
+        background: rgb(128, 128, 128);
+        gap: 8px;
+    }
+
+    .chat-input-area input {
+        flex: 1;
+        padding: 10px 14px;
+        border: 0.6px solid #000000;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        outline: none;
+        background-color: #afafaf;
+    }
+
+    .chat-input-area button {
+        padding: 10px 20px;
+        background-color: #5eaeff;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.95rem;
+    }
+
+    .chat-input-area button:hover { background-color: #3590eb; }
+    .chat-input-area button:disabled { opacity: 0.6; cursor: not-allowed; }
+</style>
+
+<script>
+    //cria a lista que vai guardar todo o historico do chat
+    let historico = [];
+    //função para enviar a mensagem do usuario para o backend e receber a resposta
+    async function enviarMensagem() {
+        const input = document.getElementById("userInput");
+        const mensagem = input.value.trim();
+        //verifica se o input não está vazio
+        if (!mensagem) return;
+
+        //adiciona a mensagem do usuario no chat e limpa o input
+        adicionarMensagem("user", mensagem);
+        input.value = "";
+
+        const btn = document.getElementById("sendBtn");
+        //desabilita o botão e mostra uma mensagem de "Aguarde..." enquanto espera a resposta do backend
+        btn.disabled = true;
+        btn.textContent = "Aguarde...";
+
+        adicionarMensagem("assistant", "...");
+
+        //envia a mensagem e o historico para o backend
+        try {
+            const response = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mensagem, historico })
+            });
+
+            const data = await response.json();
+
+            //remove a mensagem de "Aguarde..." e adiciona a resposta do backend
+            removerUltimaMensagem();
+            adicionarMensagem("assistant", data.resposta);
+            //adiciona a mensagem do usuario e a resposta do backend no historico
+            historico.push({ role: "user", content: mensagem });
+            historico.push({ role: "assistant", content: data.resposta });
+
+        }
+        //em caso de erro, remove a mensagem de "Aguarde..." e mostra uma mensagem de erro
+        catch (error) {
+            removerUltimaMensagem();
+            adicionarMensagem("assistant", "Erro ao conectar. Tente novamente.");
+        }
+
+        btn.disabled = false;
+        btn.textContent = "Enviar";
+    }
+
+    //função para adicionar mensagens no chat
+    function adicionarMensagem(tipo, texto) {
+        const container = document.getElementById("chatMessages");
+        const div = document.createElement("div");
+        div.className = `message ${tipo}`;
+        div.innerHTML = `<div class="message-content">${texto}</div>`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    //função para remover a última mensagem do chat
+    function removerUltimaMensagem() {
+        const container = document.getElementById("chatMessages");
+        container.removeChild(container.lastChild);
+    }
+    //adiciona evento para enviar mensagem ao pressionar Enter
+    document.getElementById("userInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") enviarMensagem();
+    });
+</script>
