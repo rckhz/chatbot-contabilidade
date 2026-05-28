@@ -3,183 +3,344 @@
 }
 
 <div class="chat-container">
+
     <div class="chat-header">
-        <h2>chatbot</h2>
+        <h2>🤖 Chatbot Contábil</h2>
     </div>
 
     <div class="chat-messages" id="chatMessages">
+
         <div class="message assistant">
             <div class="message-content">
-                Olá! Sou seu assistente de contabilidade. Como posso te ajudar hoje?
+                👋 Olá! Sou seu assistente de contabilidade. Como posso te ajudar hoje?
             </div>
         </div>
+
     </div>
 
     <div class="chat-input-area">
-        <input type="text" id="userInput" placeholder="Digite sua dúvida contábil..." />
-        <button id="sendBtn" onclick="enviarMensagem()">Enviar</button>
+
+        <input type="text"
+               id="userInput"
+               placeholder="Digite sua dúvida contábil..." />
+
+        <button id="sendBtn" onclick="enviarMensagem()">
+            Enviar
+        </button>
+
     </div>
+
 </div>
 
 <style>
+
     body {
         background-color: rgb(78, 78, 78);
-        font-family: opensans, sans-serif;
+        font-family: OpenSans, sans-serif;
         margin: 0;
     }
 
     .chat-container {
-        max-width: 800px;
+        max-width: 900px;
         margin: 30px auto;
         border: 1px solid #000000;
-        border-radius: 12px;
+        border-radius: 16px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        height: 75vh;
-        box-shadow: -10px -10px 10px #0000005e, 10px 10px 10px #0000005e
-        }
-
-    .chat-header {
-        background-color: #525252;
-        color: white;
-        padding: 16px 20px;
+        height: 85vh;
+        box-shadow: -10px -10px 10px #0000005e, 10px 10px 10px #0000005e;
     }
 
-    .chat-header h2 { margin: 0; font-size: 1.2rem; }
-    .chat-header p { margin: 4px 0 0; font-size: 0.85rem; opacity: 0.8; }
+    .chat-header {
+        background: linear-gradient(135deg, #1f1f1f 0%, #3a3a3a 100%);
+        color: white;
+        padding: 18px 22px;
+    }
+
+        .chat-header h2 {
+            margin: 0;
+            font-size: 1.3rem;
+        }
 
     .chat-messages {
         flex: 1;
         overflow-y: auto;
         padding: 20px;
-        background: #ffffff5e;
+        background: #ffffff18;
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
     }
 
-    .message { display: flex; }
-    .message.user { justify-content: flex-end; }
-    .message.assistant { justify-content: flex-start; }
+    .message {
+        display: flex;
+        animation: fadeIn 0.2s ease-in-out;
+    }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            justify-content: flex-start;
+        }
 
     .message-content {
-        max-width: 70%;
-        padding: 10px 14px;
-        border-radius: 12px;
+        max-width: 85%;
+        padding: 14px 16px;
+        border-radius: 14px;
         font-size: 0.95rem;
-        line-height: 1.5;
+        line-height: 1.6;
+        color: white;
+        word-break: break-word;
     }
 
     .message.user .message-content {
         background-image: linear-gradient(135deg, #81a3b8 0%, #3c8de4 100%);
-        color: rgb(0, 0, 0);
-        border-bottom-right-radius: 2px;
+        border-bottom-right-radius: 4px;
     }
 
     .message.assistant .message-content {
         background-image: linear-gradient(135deg, #4db1eb 0%, #1b7ddf 100%);
-        border-bottom-left-radius: 2px;
+        border-bottom-left-radius: 4px;
     }
 
     .chat-input-area {
         display: flex;
-        padding: 12px;
+        padding: 14px;
         border-top: 1px solid #000000;
-        background: rgb(128, 128, 128);
-        gap: 8px;
+        background: rgb(80, 80, 80);
+        gap: 10px;
     }
 
-    .chat-input-area input {
-        flex: 1;
-        padding: 10px 14px;
-        border: 0.6px solid #000000;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        outline: none;
-        background-color: #afafaf;
+        .chat-input-area input {
+            flex: 1;
+            padding: 12px 14px;
+            border: 1px solid #000000;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            outline: none;
+            background-color: #d8d8d8;
+        }
+
+        .chat-input-area button {
+            padding: 12px 22px;
+            background-color: #5eaeff;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+            .chat-input-area button:hover {
+                background-color: #3590eb;
+                transform: scale(1.03);
+            }
+
+            .chat-input-area button:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+    /* markdown */
+
+    .message-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        overflow: hidden;
+        border-radius: 10px;
     }
 
-    .chat-input-area button {
-        padding: 10px 20px;
-        background-color: #5eaeff;
-        color: white;
+    .message-content th {
+        background: rgba(0,0,0,0.25);
+        padding: 10px;
+        text-align: left;
+    }
+
+    .message-content td {
+        padding: 10px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .message-content h1,
+    .message-content h2,
+    .message-content h3 {
+        margin-top: 10px;
+    }
+
+    .message-content ul {
+        padding-left: 20px;
+    }
+
+    .message-content code {
+        background: rgba(0,0,0,0.2);
+        padding: 2px 6px;
+        border-radius: 6px;
+    }
+
+    .message-content pre {
+        background: rgba(0,0,0,0.25);
+        padding: 12px;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+    .message-content strong {
+        color: #ffffff;
+    }
+
+    .message-content hr {
         border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 0.95rem;
+        border-top: 1px solid rgba(255,255,255,0.2);
+        margin: 14px 0;
     }
 
-    .chat-input-area button:hover { background-color: #3590eb; }
-    .chat-input-area button:disabled { opacity: 0.6; cursor: not-allowed; }
+    @@keyframes fadeIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <script>
-    //cria a lista que vai guardar todo o historico do chat
+
+    // histórico do chat
     let historico = [];
-    //função para enviar a mensagem do usuario para o backend e receber a resposta
+
+    // enviar mensagem
     async function enviarMensagem() {
-        const input = document.getElementById("userInput");
-        const mensagem = input.value.trim();
-        //verifica se o input não está vazio
-        if (!mensagem) return;
 
-        //adiciona a mensagem do usuario no chat e limpa o input
-        adicionarMensagem("user", mensagem);
-        input.value = "";
+    const input = document.getElementById("userInput");
 
-        const btn = document.getElementById("sendBtn");
-        //desabilita o botão e mostra uma mensagem de "Aguarde..." enquanto espera a resposta do backend
-        btn.disabled = true;
-        btn.textContent = "Aguarde...";
+    const mensagem = input.value.trim();
 
-        adicionarMensagem("assistant", "...");
+    if (!mensagem) return;
 
-        //envia a mensagem e o historico para o backend
-        try {
-            const response = await fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ mensagem, historico })
-            });
+    adicionarMensagem("user", mensagem);
 
-            const data = await response.json();
+    input.value = "";
 
-            //remove a mensagem de "Aguarde..." e adiciona a resposta do backend
-            removerUltimaMensagem();
-            adicionarMensagem("assistant", data.resposta);
-            //adiciona a mensagem do usuario e a resposta do backend no historico
-            historico.push({ role: "user", content: mensagem });
-            historico.push({ role: "assistant", content: data.resposta });
+    const btn = document.getElementById("sendBtn");
 
-        }
-        //em caso de erro, remove a mensagem de "Aguarde..." e mostra uma mensagem de erro
-        catch (error) {
-            removerUltimaMensagem();
-            adicionarMensagem("assistant", "Erro ao conectar. Tente novamente.");
-        }
+    btn.disabled = true;
 
-        btn.disabled = false;
-        btn.textContent = "Enviar";
-    }
+    btn.innerHTML = "⏳ Aguarde...";
 
-    //função para adicionar mensagens no chat
-    function adicionarMensagem(tipo, texto) {
-        const container = document.getElementById("chatMessages");
-        const div = document.createElement("div");
-        div.className = `message ${tipo}`;
-        div.innerHTML = `<div class="message-content">${texto}</div>`;
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
-    }
+    adicionarMensagem("assistant", "⌛ Processando...");
 
-    //função para remover a última mensagem do chat
-    function removerUltimaMensagem() {
-        const container = document.getElementById("chatMessages");
-        container.removeChild(container.lastChild);
-    }
-    //adiciona evento para enviar mensagem ao pressionar Enter
-    document.getElementById("userInput").addEventListener("keypress", function (e) {
-        if (e.key === "Enter") enviarMensagem();
+    try {
+
+    const response = await fetch("/api/chat", {
+
+    method: "POST",
+
+    headers: {
+    "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+    mensagem,
+    historico
+    })
     });
+
+    const data = await response.json();
+
+    removerUltimaMensagem();
+
+    adicionarMensagem("assistant", data.resposta);
+
+    historico.push({
+    role: "user",
+    content: mensagem
+    });
+
+    historico.push({
+    role: "assistant",
+    content: data.resposta
+    });
+
+    } catch (error) {
+
+    removerUltimaMensagem();
+
+    adicionarMensagem(
+    "assistant",
+    "❌ Erro ao conectar com o servidor."
+    );
+
+    console.error(error);
+    }
+
+    btn.disabled = false;
+
+    btn.innerHTML = "Enviar";
+    }
+
+    // adicionar mensagem
+    function adicionarMensagem(tipo, texto) {
+
+    const container = document.getElementById("chatMessages");
+
+    const div = document.createElement("div");
+
+    div.className = `message ${tipo}`;
+
+    const content = document.createElement("div");
+
+    content.className = "message-content";
+
+    // renderiza markdown
+    if (window.marked) {
+
+    content.innerHTML = marked.parse(texto || "");
+
+    } else {
+
+    content.textContent = texto;
+    }
+
+    div.appendChild(content);
+
+    container.appendChild(div);
+
+    container.scrollTop = container.scrollHeight;
+    }
+
+    // remover última mensagem
+    function removerUltimaMensagem() {
+
+    const container = document.getElementById("chatMessages");
+
+    if (container.lastChild) {
+
+    container.removeChild(container.lastChild);
+    }
+    }
+
+    // enviar ao apertar enter
+    document
+    .getElementById("userInput")
+    .addEventListener("keypress", function (e) {
+
+    if (e.key === "Enter") {
+
+    enviarMensagem();
+    }
+    });
+
 </script>

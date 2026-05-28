@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="chatbot-contabilidade/chatbot-contabilidade.csproj" />
+  <Project Path="crud/crud.csproj" Id="1f7c7f4c-cb31-41de-837e-2a98fbe1b87f" />
 </Solution>
